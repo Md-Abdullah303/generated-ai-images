@@ -1,6 +1,6 @@
 import PhotoCard from "@/UI/PhotoCard";
 
-const page = async() => {
+const AllPhotosPage = async() => {
     const res = await fetch('https://generated-ai-images.vercel.app/data.json');
     const photos = await res.json();
 
@@ -17,4 +17,4 @@ const page = async() => {
     );
 };
 
-export default page;
+export default AllPhotosPage;
