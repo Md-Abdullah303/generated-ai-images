@@ -11,9 +11,11 @@ import {
   Label,
   TextField,
 } from "@heroui/react";
+import { GrGoogle } from "react-icons/gr";
 import { toast } from "react-toastify";
 
 export default function SignInPage() {
+  
   const onSubmit = async (e) => {
     e.preventDefault();
 
@@ -25,7 +27,7 @@ export default function SignInPage() {
     const { data, error } = await authClient.signIn.email({
       email,
       password,
-      callbackURL: '/'
+      callbackURL: "/",
     });
 
     // console.log(data, error);
@@ -35,6 +37,13 @@ export default function SignInPage() {
     } else if (error) {
       toast.error(`${error.statusText}`);
     }
+  };
+
+  const handleGoogleSignIn = async () => {
+    const data = await authClient.signIn.social({
+      provider: "google",
+    });
+    console.log(data);
   };
 
   return (
@@ -96,6 +105,11 @@ export default function SignInPage() {
           </Button>
         </div>
       </Form>
+
+      <p className="text-center text-2xl">Or</p>
+      <Button onClick={()=> handleGoogleSignIn()} className={"w-full"}>
+        <GrGoogle /> Signin With Google
+      </Button>
     </Card>
   );
 }
