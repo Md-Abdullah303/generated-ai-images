@@ -1,5 +1,5 @@
 "use client";
-import { authClient } from "@/app/lib/auth-client";
+import { authClient } from "@/lib/auth-client";
 import { Check } from "@gravity-ui/icons";
 import {
   Button,
@@ -11,9 +11,12 @@ import {
   Label,
   TextField,
 } from "@heroui/react";
+import { redirect } from "next/dist/server/api-utils";
+import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 
 export default function SignUpPage() {
+  const router = useRouter();
   const onSubmit = async (e) => {
     e.preventDefault();
 
@@ -24,15 +27,16 @@ export default function SignUpPage() {
 
     console.log(name, email, password, image);
 
-    const { data, error } = await authClient.signUp({
+    const { data, error } = await authClient.signUp.email({
       name,
       email,
       password,
       image,
     });
-    console.log(data, error);
+    // console.log(data, error);
     if (data) {
-      alert("success");
+      toast.success(`Success fully login..`);
+      router.push("/")
     } else if (error) {
       toast.error(`${error.statusText}`);
     }

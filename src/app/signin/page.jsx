@@ -1,4 +1,5 @@
 "use client";
+import { authClient } from "@/lib/auth-client";
 import { Check } from "@gravity-ui/icons";
 import {
   Button,
@@ -10,10 +11,30 @@ import {
   Label,
   TextField,
 } from "@heroui/react";
+import { toast } from "react-toastify";
 
 export default function SignInPage() {
   const onSubmit = async (e) => {
     e.preventDefault();
+
+    const email = e.target.email.value;
+    const password = e.target.password.value;
+
+    console.log(email, password);
+
+    const { data, error } = await authClient.signIn.email({
+      email,
+      password,
+      callbackURL: '/'
+    });
+
+    // console.log(data, error);
+
+    if (data) {
+      toast.success(`Success fully login..`);
+    } else if (error) {
+      toast.error(`${error.statusText}`);
+    }
   };
 
   return (
@@ -21,7 +42,6 @@ export default function SignInPage() {
       <h1 className="text-center text-2xl font-bold">Sign In</h1>
 
       <Form className="flex w-96 mx-auto flex-col gap-4" onSubmit={onSubmit}>
-
         <TextField
           isRequired
           name="email"
