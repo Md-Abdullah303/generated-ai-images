@@ -26,7 +26,7 @@ export default function RootLayout({ children }) {
     >
       <body className="">
         <Navbar/>
-        <main className="max-w-7xl sm:container w-[85%] mx-auto">{children}</main>
+        <main className="max-w-7xl sm:container w-[85%] mx-auto px-5">{children}</main>
         <Footer/>
         <ToastContainer />
         </body>

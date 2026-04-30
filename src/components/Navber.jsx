@@ -3,68 +3,110 @@ import { authClient } from "@/lib/auth-client";
 import { Avatar, Button } from "@heroui/react";
 import Image from "next/image";
 import Link from "next/link";
+import MyNavLink from "./MyNavLink";
+import { useState } from "react";
 
 const Navbar = () => {
   const userData = authClient.useSession();
   const user = userData.data?.user;
-  // console.log(user);
+  const [menuOpen, setMenuOpen] = useState(false);
 
-  const handleLogOut = async()=>{
+  const handleLogOut = async () => {
     await authClient.signOut();
-  }
+  };
 
   return (
-    <div className="border-b px-2">
-      <nav className=" flex justify-between items-center  py-3 max-w-7xl mx-auto w-full">
+    <div className="border-b px-3">
+      <nav className="flex justify-between items-center py-3 max-w-7xl mx-auto">
+        
+        {/* Logo */}
         <div className="flex gap-2 items-center">
           <Image
             src={"/logo.png"}
             alt="logo"
-            loading="eager"
             width={30}
             height={30}
-            className="object-cover h-auto w-auto"
           />
           <h3 className="font-black text-lg">pixgen.</h3>
         </div>
 
-        <ul className="flex items-center gap-5 text-sm">
-          <li>
-            <Link href={"/"}>Home</Link>
-          </li>
-          <li>
-            <Link href={"/all-photos"}>All Photos</Link>
-          </li>
-          <li>
-            <Link href={"/profile"}>Profile</Link>
-          </li>
+        {/* Desktop Menu */}
+        <ul className="hidden md:flex items-center gap-6 text-sm">
+          <li><MyNavLink href={"/"}>Home</MyNavLink></li>
+          <li><MyNavLink href={"/all-photos"}>All Photos</MyNavLink></li>
+          <li><MyNavLink href={"/profile"}>Profile</MyNavLink></li>
         </ul>
 
-        <div className="flex gap-4">
+        {/* Right Side */}
+        <div className="hidden md:flex gap-4 items-center">
           {user ? (
             <div className="flex items-center gap-3">
-              <h1 className="text-sm font-semibold">Hi!, {user?.name}</h1>
+              <h1 className="text-sm font-semibold">
+                Hi, {user?.name}
+              </h1>
+
               <Avatar>
-                <Avatar.Image
-                  alt="John Doe"
-                  src={user?.image}
-                />
-                <Avatar.Fallback>{user?.name.charAt(0)}</Avatar.Fallback>
+                <Avatar.Image src={user?.image} />
+                <Avatar.Fallback>
+                  {user?.name?.charAt(0)}
+                </Avatar.Fallback>
               </Avatar>
-              <Button onClick={handleLogOut} variant="danger" >LogOut</Button>
+
+              <Button onClick={handleLogOut} variant="danger">
+                Logout
+              </Button>
             </div>
           ) : (
-            <ul className="flex items-center gap-4 text-sm">
-              <li>
-                <Link href={"/singup"}>SignUp</Link>
-              </li>
-              <li>
-                <Link href={"/signin"}>SignIn</Link>
-              </li>
-            </ul>
+            <>
+              <Link href={"/singup"}>SignUp</Link>
+              <Link href={"/signin"}>SignIn</Link>
+            </>
           )}
         </div>
+
+        {/* Mobile Menu Button */}
+        <button
+          className="md:hidden text-xl cursor-pointer"
+          onClick={() => setMenuOpen(!menuOpen)}
+        >
+          ☰
+        </button>
       </nav>
+
+      {/* Mobile Menu */}
+      {menuOpen && (
+        <div className="md:hidden flex flex-col gap-4 py-4 border-t">
+          
+          <MyNavLink href={"/"}>Home</MyNavLink>
+          <MyNavLink href={"/all-photos"}>All Photos</MyNavLink>
+          <MyNavLink href={"/profile"}>Profile</MyNavLink>
+
+          <div className="border-t pt-3">
+            {user ? (
+              <div className="flex flex-col gap-3">
+                <div className="flex items-center gap-3">
+                  <Avatar>
+                    <Avatar.Image src={user?.image} />
+                    <Avatar.Fallback>
+                      {user?.name?.charAt(0)}
+                    </Avatar.Fallback>
+                  </Avatar>
+                  <span>{user?.name}</span>
+                </div>
+
+                <Button onClick={handleLogOut} variant="danger">
+                  Logout
+                </Button>
+              </div>
+            ) : (
+              <div className="flex sm:flex-col gap-2">
+                <Link href={"/signup"}>SignUp</Link>
+                <Link href={"/signin"}>SignIn</Link>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
