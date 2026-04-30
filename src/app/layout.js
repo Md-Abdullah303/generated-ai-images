@@ -2,6 +2,7 @@ import { Outfit } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navber";
 import Footer from "@/components/Footer";
+import { ToastContainer } from "react-toastify";
 
 const outfit = Outfit({
   variable: "--font-geist-sans",
@@ -24,6 +25,7 @@ export default function RootLayout({ children }) {
         <Navbar/>
         <main className="max-w-7xl sm:container w-[85%] mx-auto">{children}</main>
         <Footer/>
+        <ToastContainer />
         </body>
     </html>
   );
