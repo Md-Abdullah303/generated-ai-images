@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import MyNavLink from "./MyNavLink";
 import { useState } from "react";
+import { redirect } from "next/navigation";
 
 const Navbar = () => {
   const userData = authClient.useSession();
@@ -13,6 +14,7 @@ const Navbar = () => {
 
   const handleLogOut = async () => {
     await authClient.signOut();
+    redirect('/')
   };
 
   return (
